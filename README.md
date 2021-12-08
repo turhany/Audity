@@ -70,6 +70,13 @@ Simple EF(Core) Change Tracker base audit log library.
         public string OldValue { get; set; }
         public string NewValue { get; set; }
     }
+    
+    public enum AuditLogOperationType
+    {
+        Added = 1,
+        Updated = 2,
+        Deleted = 3
+    }
 
 ```
 
