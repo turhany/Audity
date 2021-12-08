@@ -2,8 +2,28 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Türhan Yıldırım</Authors>
+        <Description>Simple EF(Core) Change Tracker base audit log library.</Description>
+        <PackageProjectUrl>https://github.com/turhany/Audity</PackageProjectUrl>
+        <PackageIcon>audity.png</PackageIcon>
+        <RepositoryUrl>https://github.com/turhany/Audity</RepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageTags>Audit, Log, ChangeTracker</PackageTags>
+        <PackageVersion>1.0.0</PackageVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="..\..\img\audity.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
+    
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

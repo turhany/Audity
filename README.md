@@ -1,2 +1,95 @@
 # Audity
-Simple EF(Core) Change Tracker base audit log library
+
+![alt tag](/img/audity.png)  
+
+Simple EF(Core) Change Tracker base audit log library.
+
+[![NuGet version](https://badge.fury.io/nu/Audity.svg)](https://badge.fury.io/nu/Audity)  ![Nuget](https://img.shields.io/nuget/dt/Audity) 
+
+#### Features:
+- Give entity key property value as your configuration (KeyPropertyName)
+- Can get Environment data (IncludeEnvironmentData)
+    - Version
+    - MachineName
+    - UserName
+    - OSVersion
+    - UserDomainName
+- Get Audit data for changed entities (AuditLogEntries)
+    - KeyPropertyValue
+    - EntityName
+    - OldValue
+    - NewValue
+    - AuditLogOperationType
+        - Added
+        - Updated
+        - Deleted
+- Can exclude Entities from Audit flow (ExcludeEntities)
+- Can mask Properties from Audit flow (MaskedEntities, masked with "******")
+
+#### Atention:
+- If you get data with "AsNoTracking()", you can not get property change data  
+     
+##### Audit Data Configuration Object Structure:
+
+```cs
+
+    public class AuditConfigurations
+    {
+        public string KeyPropertyName { get; set; }
+        public bool IncludeEnvironmentData { get; set; }
+        public List<string> ExcludeEntities { get; set; } = new List<string>();
+        public List<string> MaskedEntities { get; set; } = new List<string>();
+    }
+
+```
+
+##### Audit Data Response Object Structure:
+
+```cs
+
+    public class AuditEntryResult
+    {
+        public EnvironmentData EnvironmentData { get; set; }
+        public List<AuditLogEntry> AuditLogEntries { get; set; } = new List<AuditLogEntry>();
+    }
+
+    public class EnvironmentData
+    {
+        public string MachineName { get; set; }
+        public string OSVersion { get; set; }
+        public string UserDomainName { get; set; }
+        public string UserName { get; set; }
+        public string Version { get; set; }
+    }
+
+    public class AuditLogEntry
+    {
+        public string KeyPropertyValue { get; set; }
+        public string EntityName { get; set; }
+        public AuditLogOperationType AuditLogOperationType { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
+    }
+
+```
+
+##### Usage(Code):
+
+```cs
+
+    var auditResponse =_context.GetAuditData(new AuditConfigurations
+    {
+        KeyPropertyName = "Id",
+        IncludeEnvironmentData = true,
+        MaskedEntities = new List<String>(){ "Password" }
+    });
+    
+```
+   
+![alt tag](/img/sample.png) 
+
+### Release Notes
+
+##### 1.0.0
+* Base release
+* Support Ef Core 5.0.12
