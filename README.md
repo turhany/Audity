@@ -97,6 +97,10 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.3
+* MaskedEntities name changed as MaskedProperties
+* NewValue data not mask bug fixed
+
 ##### 1.0.2
 * GetAuditData extension moved under ChangeTracker
 * AuditConfigurations name changed to AuditConfiguration

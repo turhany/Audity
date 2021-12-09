@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Audity.Model;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +73,7 @@ namespace Audity.Generator
                         
                         if (oldValueObj.OldValue != oldValueObj.NewValue)
                         {
-                            if (configuration.MaskedEntities.Contains(propertyEntry.Name))
+                            if (configuration.MaskedProperties.Contains(propertyEntry.Name))
                             {
                                 oldValueObj.NewValue = MaskText;
                                 oldValueObj.OldValue = MaskText;
@@ -90,7 +91,21 @@ namespace Audity.Generator
                     }
                     auditEntry.EntityName = entityType;
                     auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList);
-                    auditEntry.NewValue = JsonConvert.SerializeObject(entityEntry.Entity);
+
+                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity);
+                    var deSerializedEntity = JsonConvert.DeserializeObject<ExpandoObject>(serializedNewEntity);
+                    var propertyListNewEntity = (IDictionary<String, object>) deSerializedEntity;
+                    
+                    foreach (var propertyName in configuration.MaskedProperties)
+                    {
+                        if (propertyListNewEntity.ContainsKey(propertyName))
+                        {
+                            propertyListNewEntity[propertyName] = MaskText;
+                        }
+                    }
+                    
+                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity);
+                    
                     switch (entityEntry.State)
                     {
                         case EntityState.Deleted:

@@ -10,6 +10,6 @@ namespace Audity.Model
         public string KeyPropertyName { get; set; }
         public bool IncludeEnvironmentData { get; set; }
         public List<string> ExcludeEntities { get; set; } = new List<string>();
-        public List<string> MaskedEntities { get; set; } = new List<string>();
+        public List<string> MaskedProperties { get; set; } = new List<string>();
     }
 }
