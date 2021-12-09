@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Audity.Model
 {
-    public class AuditConfigurations
+    public class AuditConfiguration
     {
         public string KeyPropertyName { get; set; }
         public bool IncludeEnvironmentData { get; set; }

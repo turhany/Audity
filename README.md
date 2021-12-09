@@ -33,7 +33,7 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ```cs
 
-    public class AuditConfigurations
+    public class AuditConfiguration
     {
         public string KeyPropertyName { get; set; }
         public bool IncludeEnvironmentData { get; set; }
@@ -84,7 +84,7 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ```cs
 
-    var auditResponse =_context.GetAuditData(new AuditConfigurations
+    var auditResponse =_context.ChangeTracker.GetAuditData(new AuditConfiguration
     {
         KeyPropertyName = "Id",
         IncludeEnvironmentData = true,
@@ -96,6 +96,15 @@ Simple EF(Core) Change Tracker base audit log library.
 ![alt tag](/img/sample.png) 
 
 ### Release Notes
+
+##### 1.0.2
+* GetAuditData extension moved under ChangeTracker
+* AuditConfigurations name changed to AuditConfiguration
+* Null check added for ChangeTracker and AuditConfiguration
+* AuditLogEntry.NewValue null bug fixed
+
+##### 1.0.1
+* GetAuditData extension moved under ChangeTracker
 
 ##### 1.0.0
 * Base release

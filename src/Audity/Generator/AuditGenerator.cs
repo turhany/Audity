@@ -15,10 +15,20 @@ namespace Audity.Generator
     {
         private const string MaskText = "******";
 
-        public static AuditEntryResult Generate(ChangeTracker changeTracker, AuditConfigurations configurations)
+        public static AuditEntryResult Generate(ChangeTracker changeTracker, AuditConfiguration configuration)
         {
+            if (changeTracker is null)
+            {
+                throw new ArgumentNullException(nameof(changeTracker));
+            }
+            
+            if (configuration is null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+            
             var response = new AuditEntryResult();
-            if (configurations.IncludeEnvironmentData)
+            if (configuration.IncludeEnvironmentData)
             {
                 response.EnvironmentData = new EnvironmentData
                 {
@@ -43,7 +53,7 @@ namespace Audity.Generator
                     var auditEntry = new AuditLogEntry();
                     
                     var entityType = entityEntry.Entity.GetType().ToString().Split('.').Last();
-                    if (configurations.ExcludeEntities.Contains(entityType))
+                    if (configuration.ExcludeEntities.Contains(entityType))
                     {
                         continue;
                     }
@@ -62,7 +72,7 @@ namespace Audity.Generator
                         
                         if (oldValueObj.OldValue != oldValueObj.NewValue)
                         {
-                            if (configurations.MaskedEntities.Contains(propertyEntry.Name))
+                            if (configuration.MaskedEntities.Contains(propertyEntry.Name))
                             {
                                 oldValueObj.NewValue = MaskText;
                                 oldValueObj.OldValue = MaskText;
@@ -71,13 +81,16 @@ namespace Audity.Generator
                         }
                     }
 
-                    auditEntry.KeyPropertyValue = entityEntry.Entity
-                        .GetType()
-                        .GetProperty(configurations.KeyPropertyName)
-                        .GetValue(entityEntry.Entity).ToString();
+                    if (!string.IsNullOrWhiteSpace(configuration.KeyPropertyName))
+                    {
+                        auditEntry.KeyPropertyValue = entityEntry.Entity
+                            .GetType()
+                            .GetProperty(configuration.KeyPropertyName)
+                            .GetValue(entityEntry.Entity).ToString();    
+                    }
                     auditEntry.EntityName = entityType;
                     auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList);
-                    auditEntry.NewValue = string.Empty;
+                    auditEntry.NewValue = JsonConvert.SerializeObject(entityEntry.Entity);
                     switch (entityEntry.State)
                     {
                         case EntityState.Deleted:

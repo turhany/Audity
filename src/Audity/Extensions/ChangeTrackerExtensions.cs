@@ -7,9 +7,9 @@ namespace Audity.Extensions
 {
     public static class ChangeTrackerExtensions
     {
-        public static AuditEntryResult GetAuditData(this ChangeTracker changeTracker, AuditConfigurations configurations)
+        public static AuditEntryResult GetAuditData(this ChangeTracker changeTracker, AuditConfiguration configuration)
         {
-            return AuditGenerator.Generate(changeTracker, configurations);
+            return AuditGenerator.Generate(changeTracker, configuration);
         }
     }
 }
