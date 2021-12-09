@@ -24,7 +24,7 @@ Simple EF(Core) Change Tracker base audit log library.
         - Updated
         - Deleted
 - Can exclude Entities from Audit flow (ExcludeEntities)
-- Can mask Properties from Audit flow (MaskedEntities, masked with "******")
+- Can mask Properties from Audit flow (MaskedProperties, masked with "******")
 
 #### Atention:
 - If you get data with "AsNoTracking()", you can not get property change data  
@@ -38,7 +38,7 @@ Simple EF(Core) Change Tracker base audit log library.
         public string KeyPropertyName { get; set; }
         public bool IncludeEnvironmentData { get; set; }
         public List<string> ExcludeEntities { get; set; } = new List<string>();
-        public List<string> MaskedEntities { get; set; } = new List<string>();
+        public List<string> MaskedProperties { get; set; } = new List<string>();
     }
 
 ```
@@ -88,7 +88,7 @@ Simple EF(Core) Change Tracker base audit log library.
     {
         KeyPropertyName = "Id",
         IncludeEnvironmentData = true,
-        MaskedEntities = new List<String>(){ "Password" }
+        MaskedProperties = new List<String>(){ "Password" }
     });
     
 ```
