@@ -15,7 +15,7 @@ namespace Audity.Generator
     {
         private const string MaskText = "******";
 
-        public static AuditEntryResult Generate(DbContext item, AuditConfigurations configurations)
+        public static AuditEntryResult Generate(ChangeTracker changeTracker, AuditConfigurations configurations)
         {
             var response = new AuditEntryResult();
             if (configurations.IncludeEnvironmentData)
@@ -30,7 +30,7 @@ namespace Audity.Generator
                 };
             }
             
-            var changes = item.ChangeTracker.Entries()
+            var changes = changeTracker.Entries()
                 .Where(x => 
                     x.State == EntityState.Modified ||
                     x.State == EntityState.Added ||
