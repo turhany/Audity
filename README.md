@@ -1,5 +1,3 @@
-# Audity
-
 ![alt tag](/img/audity.png)  
 
 Simple EF(Core) Change Tracker base audit log library.
