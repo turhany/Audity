@@ -95,6 +95,10 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.4
+* Target Framework changed as net6.0
+* Ef Version updated to  6.0.1
+
 ##### 1.0.3
 * MaskedEntities name changed as MaskedProperties
 * NewValue data not mask bug fixed
