@@ -95,6 +95,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.5
+* Ef Version updated to  6.0.8
+
 ##### 1.0.4
 * Target Framework changed as net6.0
 * Ef Version updated to  6.0.1
