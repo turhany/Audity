@@ -92,16 +92,12 @@ namespace Audity.Generator
                     auditEntry.EntityName = entityType;
                     auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, new JsonSerializerSettings
                     {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.All,
-                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
 
                     var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity, new JsonSerializerSettings
                     {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.All,
-                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
                     var deSerializedEntity = JsonConvert.DeserializeObject<ExpandoObject>(serializedNewEntity);
                     var propertyListNewEntity = (IDictionary<String, object>) deSerializedEntity;
@@ -116,9 +112,7 @@ namespace Audity.Generator
                     
                     auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity, new JsonSerializerSettings
                     {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.All,
-                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
                     
                     switch (entityEntry.State)
