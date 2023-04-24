@@ -90,9 +90,19 @@ namespace Audity.Generator
                             .GetValue(entityEntry.Entity).ToString();    
                     }
                     auditEntry.EntityName = entityType;
-                    auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList);
+                    auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.All,
+                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                    });
 
-                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity);
+                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.All,
+                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                    });
                     var deSerializedEntity = JsonConvert.DeserializeObject<ExpandoObject>(serializedNewEntity);
                     var propertyListNewEntity = (IDictionary<String, object>) deSerializedEntity;
                     
@@ -104,7 +114,12 @@ namespace Audity.Generator
                         }
                     }
                     
-                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity);
+                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.All,
+                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                    });
                     
                     switch (entityEntry.State)
                     {
