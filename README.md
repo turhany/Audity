@@ -95,6 +95,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.9
+* Ef Version updated to  7.0.9
+
 ##### 1.0.8
 * Newtonsoft SerializeObject reference loop options changed
 
