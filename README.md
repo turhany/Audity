@@ -95,6 +95,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.10
+* "KeyPropertyValue" select null refernce bug fixed
+
 ##### 1.0.9
 * Ef Version updated to  7.0.9
 

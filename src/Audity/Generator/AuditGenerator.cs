@@ -86,8 +86,8 @@ namespace Audity.Generator
                     {
                         auditEntry.KeyPropertyValue = entityEntry.Entity
                             .GetType()
-                            .GetProperty(configuration.KeyPropertyName)
-                            .GetValue(entityEntry.Entity).ToString();    
+                            .GetProperty(configuration.KeyPropertyName)?
+                            .GetValue(entityEntry.Entity)?.ToString();    
                     }
                     auditEntry.EntityName = entityType;
                     auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, new JsonSerializerSettings
