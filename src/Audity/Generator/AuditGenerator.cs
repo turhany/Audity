@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Audity.Converters;
 using Audity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -15,19 +16,29 @@ namespace Audity.Generator
     public class AuditGenerator
     {
         private const string MaskText = "******";
+        private static JsonSerializerSettings _jsonSerializerSettings;
 
+
+        public AuditGenerator()
+        {
+            _jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+            _jsonSerializerSettings.Converters.Add(new IPAddressConverter());
+        }
         public static AuditEntryResult Generate(ChangeTracker changeTracker, AuditConfiguration configuration)
         {
             if (changeTracker is null)
             {
                 throw new ArgumentNullException(nameof(changeTracker));
             }
-            
+
             if (configuration is null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
-            
+
             var response = new AuditEntryResult();
             if (configuration.IncludeEnvironmentData)
             {
@@ -40,37 +51,37 @@ namespace Audity.Generator
                     UserDomainName = Environment.UserDomainName
                 };
             }
-            
+
             var changes = changeTracker.Entries()
-                .Where(x => 
+                .Where(x =>
                     x.State == EntityState.Modified ||
                     x.State == EntityState.Added ||
                     x.State == EntityState.Deleted).ToList();
-            
+
             if (changes.Any())
             {
                 foreach (var entityEntry in changes)
                 {
                     var auditEntry = new AuditLogEntry();
-                    
+
                     var entityType = entityEntry.Entity.GetType().ToString().Split('.').Last();
                     if (configuration.ExcludeEntities.Contains(entityType))
                     {
                         continue;
                     }
-                    
+
                     var oldValueList = new List<PropertyChangeData>();
                     foreach (var propertyEntry in entityEntry.Metadata.GetProperties())
                     {
                         var property = entityEntry.Property(propertyEntry.Name);
-    
+
                         var oldValueObj = new PropertyChangeData
                         {
                             PropertyName = propertyEntry.Name,
                             OldValue = property.OriginalValue != null ? property.OriginalValue.ToString() : string.Empty,
                             NewValue = property.CurrentValue != null ? property.CurrentValue.ToString() : string.Empty
                         };
-                        
+
                         if (oldValueObj.OldValue != oldValueObj.NewValue)
                         {
                             if (configuration.MaskedProperties.Contains(propertyEntry.Name))
@@ -87,21 +98,15 @@ namespace Audity.Generator
                         auditEntry.KeyPropertyValue = entityEntry.Entity
                             .GetType()
                             .GetProperty(configuration.KeyPropertyName)?
-                            .GetValue(entityEntry.Entity)?.ToString();    
+                            .GetValue(entityEntry.Entity)?.ToString();
                     }
                     auditEntry.EntityName = entityType;
-                    auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+                    auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, _jsonSerializerSettings);
 
-                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity, new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity, _jsonSerializerSettings);
                     var deSerializedEntity = JsonConvert.DeserializeObject<ExpandoObject>(serializedNewEntity);
-                    var propertyListNewEntity = (IDictionary<String, object>) deSerializedEntity;
-                    
+                    var propertyListNewEntity = (IDictionary<String, object>)deSerializedEntity;
+
                     foreach (var propertyName in configuration.MaskedProperties)
                     {
                         if (propertyListNewEntity.ContainsKey(propertyName))
@@ -109,12 +114,9 @@ namespace Audity.Generator
                             propertyListNewEntity[propertyName] = MaskText;
                         }
                     }
-                    
-                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity, new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
-                    
+
+                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity, _jsonSerializerSettings);
+
                     switch (entityEntry.State)
                     {
                         case EntityState.Deleted:
@@ -127,7 +129,7 @@ namespace Audity.Generator
                             auditEntry.AuditLogOperationType = AuditLogOperationType.Added;
                             break;
                     }
-                    
+
                     response.AuditLogEntries.Add(auditEntry);
                 }
             }
