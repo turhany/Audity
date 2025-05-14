@@ -95,6 +95,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.12
+* JsonSeralizer settings serialize bug fixed.
+
 ##### 1.0.11
 * IPAddress serialize bug fixed.
 

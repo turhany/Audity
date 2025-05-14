@@ -16,17 +16,7 @@ namespace Audity.Generator
     public class AuditGenerator
     {
         private const string MaskText = "******";
-        private static JsonSerializerSettings _jsonSerializerSettings;
-
-
-        public AuditGenerator()
-        {
-            _jsonSerializerSettings = new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-            _jsonSerializerSettings.Converters.Add(new IPAddressConverter());
-        }
+        
         public static AuditEntryResult Generate(ChangeTracker changeTracker, AuditConfiguration configuration)
         {
             if (changeTracker is null)
@@ -60,6 +50,12 @@ namespace Audity.Generator
 
             if (changes.Any())
             {
+                var jsonSerializerSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                jsonSerializerSettings.Converters.Add(new IPAddressConverter());
+
                 foreach (var entityEntry in changes)
                 {
                     var auditEntry = new AuditLogEntry();
@@ -101,9 +97,9 @@ namespace Audity.Generator
                             .GetValue(entityEntry.Entity)?.ToString();
                     }
                     auditEntry.EntityName = entityType;
-                    auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, _jsonSerializerSettings);
+                    auditEntry.OldValue = JsonConvert.SerializeObject(oldValueList, jsonSerializerSettings);
 
-                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity, _jsonSerializerSettings);
+                    var serializedNewEntity = JsonConvert.SerializeObject(entityEntry.Entity, jsonSerializerSettings);
                     var deSerializedEntity = JsonConvert.DeserializeObject<ExpandoObject>(serializedNewEntity);
                     var propertyListNewEntity = (IDictionary<String, object>)deSerializedEntity;
 
@@ -115,7 +111,7 @@ namespace Audity.Generator
                         }
                     }
 
-                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity, _jsonSerializerSettings);
+                    auditEntry.NewValue = JsonConvert.SerializeObject(propertyListNewEntity, jsonSerializerSettings);
 
                     switch (entityEntry.State)
                     {
