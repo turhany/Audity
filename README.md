@@ -23,6 +23,7 @@ Simple EF(Core) Change Tracker base audit log library.
         - Deleted
 - Can exclude Entities from Audit flow (ExcludeEntities)
 - Can mask Properties from Audit flow (MaskedProperties, masked with "******")
+- Can exclude property from generated log data (AudityIgnore attribute)
 
 #### Atention:
 - If you get data with "AsNoTracking()", you can not get property change data  
@@ -94,6 +95,9 @@ Simple EF(Core) Change Tracker base audit log library.
 ![alt tag](/img/sample.png) 
 
 ### Release Notes
+
+##### 1.0.13
+* AudityIgnore attribute added.
 
 ##### 1.0.12
 * JsonSeralizer settings serialize bug fixed.
