@@ -13,13 +13,13 @@ namespace Audity.Resolver
             var property = base.CreateProperty(member, memberSerialization);
 
             if (IsIgnored(member))
-            {
-                property.ShouldSerialize = i => false;
-                property.Ignored = true;
-
+            { 
+                property.Ignored = true; 
                 property.Readable = false;
                 property.Writable = false;
                 property.HasMemberAttribute = false;
+                property.ShouldSerialize = i => false;
+                property.ShouldDeserialize = i => false;
             }
 
             return property;
