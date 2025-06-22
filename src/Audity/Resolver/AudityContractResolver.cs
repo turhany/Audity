@@ -19,6 +19,7 @@ namespace Audity.Resolver
 
                 property.Readable = false;
                 property.Writable = false;
+                property.HasMemberAttribute = false;
             }
 
             return property;

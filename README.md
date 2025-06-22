@@ -96,6 +96,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.17
+* AudityIgnore collection/class ignore bug fix.
+
 ##### 1.0.16
 * AudityIgnore collection ignore bug fix.
 
