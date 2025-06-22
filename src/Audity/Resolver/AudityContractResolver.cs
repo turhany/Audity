@@ -1,44 +1,28 @@
 ﻿using Audity.Model;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization; 
-using System.Linq;
-using System.Reflection;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq; 
 
 namespace Audity.Resolver
 {
     internal class AudityContractResolver : DefaultContractResolver
     {
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var property = base.CreateProperty(member, memberSerialization);
+            var properties = base.CreateProperties(type, memberSerialization);
 
-            if (IsIgnored(member))
-            { 
-                property.Ignored = true; 
-                property.Readable = false;
-                property.Writable = false;
-                property.HasMemberAttribute = false;
-                property.ShouldSerialize = i => false;
-                property.ShouldDeserialize = i => false;
-            }
-
-            return property;
-        }
-
-        private bool IsIgnored(MemberInfo member)
-        {
-            if (member == null || member.CustomAttributes  == null || !member.CustomAttributes.Any())
+            if (type != null && properties != null && properties.Any())
             {
-                return false;
-            }
+                return properties.Where(p =>
+                {
+                    var propInfo = type.GetProperty(p.UnderlyingName);
+                    return propInfo == null || !propInfo.IsDefined(typeof(AudityIgnoreAttribute), true);
+                }).ToList(); 
+            } 
 
-            if (member.CustomAttributes.Any(attr => attr.AttributeType == typeof(AudityIgnoreAttribute)) ||
-                member.CustomAttributes.Any(attr => attr.AttributeType == typeof(AudityCollectionIgnoreAttribute)))
-            {
-                return true;
-            }
-
-            return false;
+            return properties;
         }
     }
 }
