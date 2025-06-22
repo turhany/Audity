@@ -32,7 +32,13 @@ namespace Audity.Resolver
                 return false;
             }
 
-            return member.CustomAttributes.Any(attr => attr.AttributeType == typeof(AudityIgnoreAttribute));
+            if (member.CustomAttributes.Any(attr => attr.AttributeType == typeof(AudityIgnoreAttribute)) ||
+                member.CustomAttributes.Any(attr => attr.AttributeType == typeof(AudityCollectionIgnoreAttribute)))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
