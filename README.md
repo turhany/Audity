@@ -23,7 +23,7 @@ Simple EF(Core) Change Tracker base audit log library.
         - Deleted
 - Can exclude Entities from Audit flow (ExcludeEntities)
 - Can mask Properties from Audit flow (MaskedProperties, masked with "******")
-- Can exclude property from generated log data (AudityIgnore attribute)
+- Can exclude property/field from generated log data (AudityIgnore attribute)
 
 #### Atention:
 - If you get data with "AsNoTracking()", you can not get property change data  
@@ -75,6 +75,12 @@ Simple EF(Core) Change Tracker base audit log library.
         Added = 1,
         Updated = 2,
         Deleted = 3
+    }
+
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public sealed class AudityIgnoreAttribute : Attribute
+    { 
+
     }
 
 ```
