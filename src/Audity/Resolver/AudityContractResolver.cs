@@ -16,6 +16,9 @@ namespace Audity.Resolver
             {
                 property.ShouldSerialize = i => false;
                 property.Ignored = true;
+
+                property.Readable = false;
+                property.Writable = false;
             }
 
             return property;
