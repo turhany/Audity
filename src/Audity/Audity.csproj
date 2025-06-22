@@ -9,7 +9,7 @@
         <RepositoryUrl>https://github.com/turhany/Audity</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageTags>Audit, Log, ChangeTracker</PackageTags>
-        <PackageVersion>1.0.14</PackageVersion>
+        <PackageVersion>1.0.15</PackageVersion>
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 

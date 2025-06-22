@@ -52,7 +52,8 @@ namespace Audity.Generator
             {
                 var jsonSerializerSettings = new JsonSerializerSettings
                 {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    ContractResolver = new Audity.Resolver.AudityContractResolver(),
                 };
                 jsonSerializerSettings.Converters.Add(new IPAddressConverter());
 

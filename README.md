@@ -96,6 +96,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.15
+* ContractResolver added for AudityIgnore.
+
 ##### 1.0.14
 * AudityIgnore attribute read, write data set as false.
 

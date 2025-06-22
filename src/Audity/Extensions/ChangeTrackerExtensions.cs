@@ -1,6 +1,5 @@
 using Audity.Generator;
 using Audity.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Audity.Extensions
