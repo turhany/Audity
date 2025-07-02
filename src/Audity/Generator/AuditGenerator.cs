@@ -48,6 +48,11 @@ namespace Audity.Generator
                     x.State == EntityState.Added ||
                     x.State == EntityState.Deleted).ToList();
 
+            if (configuration.GenerateIFEntityTypeIs != null && configuration.GenerateIFEntityTypeIs.Any())
+            {
+                changes = changes.Where(p => configuration.GenerateIFEntityTypeIs.Contains(p.Entity.GetType())).ToList();
+            }
+
             if (changes.Any())
             {
                 var jsonSerializerSettings = new JsonSerializerSettings

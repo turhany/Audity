@@ -102,6 +102,9 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+##### 1.0.24 
+* AuditConfiguration > GenerateIFEntityTypeIs feature added for generate log for selected entity types
+
 ##### 1.0.23 
 * Project version upgraded to .net 9.0
 * Ef Version updated to 9.0.6

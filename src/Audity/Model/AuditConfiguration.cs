@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CollectionNeverUpdated.Global
@@ -11,5 +12,6 @@ namespace Audity.Model
         public bool IncludeEnvironmentData { get; set; }
         public List<string> ExcludeEntities { get; set; } = new List<string>();
         public List<string> MaskedProperties { get; set; } = new List<string>();
+        public List<Type> GenerateIFEntityTypeIs { get; set; } = new List<Type>();
     }
 }
