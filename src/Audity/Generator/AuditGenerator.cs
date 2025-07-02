@@ -66,7 +66,7 @@ namespace Audity.Generator
                     }
                 }
 
-                changes = changes.Where(p => configuration.GenerateIFEntityTypeIs.Contains(p.Entity.GetType())).ToList();
+                changes = tempList;
             }
 
             if (changes.Any())
