@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using Audity.Converters;
 using Audity.Model;
+using Castle.DynamicProxy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -50,6 +51,21 @@ namespace Audity.Generator
 
             if (configuration.GenerateIFEntityTypeIs != null && configuration.GenerateIFEntityTypeIs.Any())
             {
+                var tempList = new List<EntityEntry>();
+                foreach (var change in changes)
+                {
+                    var entityType = GetUnproxiedType(change.Entity);
+
+                    foreach (var compareType in configuration.GenerateIFEntityTypeIs)
+                    {
+                        if (entityType.IsAssignableTo(compareType))
+                        {
+                            tempList.Add(change);
+                            break;
+                        }
+                    }
+                }
+
                 changes = changes.Where(p => configuration.GenerateIFEntityTypeIs.Contains(p.Entity.GetType())).ToList();
             }
 
@@ -137,6 +153,16 @@ namespace Audity.Generator
             }
 
             return response;
+        }
+
+        private static Type GetUnproxiedType(object source)
+        {
+            var proxy = (source as IProxyTargetAccessor);
+
+            if (proxy == null)
+                return source.GetType();
+
+            return proxy.GetType().BaseType;
         }
     }
 }
