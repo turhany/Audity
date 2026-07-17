@@ -102,6 +102,11 @@ Simple EF(Core) Change Tracker base audit log library.
 
 ### Release Notes
 
+
+##### 1.0.30 
+* Net 10 Release
+* Ef Version updated to 10.0.10
+
 ##### 1.0.28 
 * Ef Version updated to 9.0.18
 
